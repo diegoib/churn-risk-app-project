@@ -14,11 +14,11 @@ test_data_path = os.path.join(config['test_data_path'])
 prod_deployment_path = os.path.join(config['prod_deployment_path'])
 
 ##################Function to get model predictions
-def model_predictions(data):
+def model_predictions():
     #read the deployed model and a test dataset, calculate predictions
     with open(os.path.join(prod_deployment_path, 'trainedmodel.pkl'), 'rb') as file:
         model = pickle.load(file)
-    predictions = model.predict(data)
+    predictions = model.predict(os.path.join(test_data_path,'testdata.csv'))
     #return value should be a list containing all predictions
     return predictions
 
