@@ -5,8 +5,6 @@ import json
 from datetime import datetime
 
 
-
-
 #############Load config.json and get input and output paths
 with open('config.json','r') as f:
     config = json.load(f) 
@@ -22,14 +20,13 @@ def merge_multiple_dataframe(input_folder_path, output_folder_path):
     csv_files = os.listdir(input_folder_path)
     final_df = pd.DataFrame()
     for f in csv_files:
-        new_df = pd.read_csv(f)
+        new_df = pd.read_csv(os.path.join(input_folder_path, f))
         final_df = pd.concat([final_df, new_df], axis=0)
     final_df = final_df.drop_duplicates()
     final_df.to_csv(os.path.join(output_folder_path, 'finaldata.csv'), index=False)
    
-    with open(os.path.join(output_folder_path, 'ingestedfiles.txt'), 'wb') as file:
-        file.write(csv_files)
-
+    with open(os.path.join(output_folder_path, 'ingestedfiles.txt'), 'w') as file:
+        file.write(','.join(csv_files))
 
 if __name__ == '__main__':
     merge_multiple_dataframe(input_folder_path, output_folder_path)

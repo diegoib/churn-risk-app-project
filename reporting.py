@@ -4,11 +4,9 @@ import pandas as pd
 import numpy as np
 from sklearn import metrics
 import matplotlib.pyplot as plt
-import seaborn as sns
 import json
 import os
 from diagnostics import model_predictions
-
 
 ###############Load config.json and get path variables
 with open('config.json','r') as f:
@@ -20,18 +18,15 @@ prod_deployment_path = os.path.join(config['prod_deployment_path'])
 
 
 ##############Function for reporting
-def score_model():
+def score_model(df_name):
     #calculate a confusion matrix using the test data and the deployed model
     #write the confusion matrix to the workspace
-    predictions = model_predictions()
-    data = pd.read_csv(os.path.join(test_data_path,'testdata.csv')
+    predictions = model_predictions(df_name)
+    data = pd.read_csv(os.path.join(test_data_path,'testdata.csv'))
     y_true = data['exited']
     metrics.ConfusionMatrixDisplay.from_predictions(y_true, predictions)
     plt.savefig('confusionmatrix.png')
-    
-
-
 
 
 if __name__ == '__main__':
-    score_model()
+    score_model('testdata.csv')

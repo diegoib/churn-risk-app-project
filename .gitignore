@@ -131,3 +131,4 @@ dmypy.json
 
 ## Added by me
 *.csv
+*.pkl

@@ -31,7 +31,8 @@ def score_model(test_data_path, model_path):
     predictions = model.predict(X)
     f1score = metrics.f1_score(y, predictions)
     with open(os.path.join(model_path, 'latestscore.txt'), 'w') as file:
-        file.write(f1score)
+        file.write(str(f1score))
+    return f1score
 
 if __name__ == '__main__':
     score_model(test_data_path, model_path)

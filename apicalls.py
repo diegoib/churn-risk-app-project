@@ -6,15 +6,14 @@ URL = "http://127.0.0.1/"
 
 
 #Call each API endpoint and store the responses
-response1 = #put an API call here
-response2 = #put an API call here
-response3 = #put an API call here
-response4 = #put an API call here
+response1 = requests.get('http://127.0.0.1:8000/prediction?dfpath=ingesteddata&dfname=finaldata.csv').status_code
+response2 = requests.get('http://127.0.0.1:8000/scoring?test_data_path=testdata&model_path=practicemodels').status_code
+response3 = requests.get('http://127.0.0.1:8000/summarystats').status_code
+response4 = requests.get('http://127.0.0.1:8000/diagnostics').status_code
 
 #combine all API responses
-responses = #combine reponses here
+responses = [response1, response2, response3, response4]
 
 #write the responses to your workspace
-
-
-
+with open('apicallstatus.txt', 'w') as file:
+    file.write(','.join(responses))

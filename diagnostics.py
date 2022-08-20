@@ -4,6 +4,7 @@ import numpy as np
 import timeit
 import os
 import json
+import pickle
 
 ##################Load config.json and get environment variables
 with open('config.json','r') as f:
@@ -14,11 +15,13 @@ test_data_path = os.path.join(config['test_data_path'])
 prod_deployment_path = os.path.join(config['prod_deployment_path'])
 
 ##################Function to get model predictions
-def model_predictions():
+def model_predictions(test_data_path, df_name):
     #read the deployed model and a test dataset, calculate predictions
     with open(os.path.join(prod_deployment_path, 'trainedmodel.pkl'), 'rb') as file:
         model = pickle.load(file)
-    predictions = model.predict(os.path.join(test_data_path,'testdata.csv'))
+    df = pd.read_csv(os.path.join(test_data_path, df_name))
+    df = df[['lastmonth_activity', 'lastyear_activity', 'number_of_employees']]
+    predictions = model.predict(df)
     #return value should be a list containing all predictions
     return predictions
 
@@ -27,7 +30,7 @@ def model_predictions():
 def dataframe_summary():
     #calculate summary statistics here
     df = pd.read_csv(os.path.join(dataset_csv_path, 'finaldata.csv'))
-    cols = [col for col in df.columns if df[col]dtype != "O"]
+    cols = [col for col in df.columns if df[col].dtype != "O"]
     summary = []
     for c in cols:
         summary.append(c)
@@ -64,7 +67,7 @@ def outdated_packages_list():
 
 
 if __name__ == '__main__':
-    model_predictions()
+    model_predictions(test_data_path, 'testdata.csv')
     dataframe_summary()
     missing_data()
     execution_time()
