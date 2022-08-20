@@ -17,7 +17,7 @@ model_path = os.path.join(config['output_model_path'])
 
 
 #################Function for training the model
-def train_model(dataset_csv_path):
+def train_model(dataset_csv_path, model_path):
     
     #use this logistic regression for training
     model = LogisticRegression(C=1.0, class_weight=None, dual=False, fit_intercept=True,
@@ -27,13 +27,14 @@ def train_model(dataset_csv_path):
                     warm_start=False)
     
     #fit the logistic regression to your data
-    df = pd.read_csv(dataset_csv_path)
-    X = df[['lastmonth_activity', '', '']].copy()
+    df = pd.read_csv(os.path.join(dataset_csv_path, 'finaldata.csv'))
+    X = df[['lastmonth_activity', 'lastyear_activity', 'number_of_employees']].copy()
     y = df['exited'].copy()
     model.fit(X, y)
+
+    #write the trained model to your workspace in a file called trainedmodel.pkl
     with open(os.path.join(model_path, 'trainedmodel.pkl'), 'wb') as file:
         pickle.dump(model, file)
 
-    
-    #write the trained model to your workspace in a file called trainedmodel.pkl
-
+if __name__ == '__main__':
+    train_model(dataset_csv_path, model_path)

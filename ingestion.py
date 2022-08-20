@@ -31,6 +31,5 @@ def merge_multiple_dataframe(input_folder_path, output_folder_path):
         file.write(csv_files)
 
 
-
 if __name__ == '__main__':
     merge_multiple_dataframe(input_folder_path, output_folder_path)

@@ -26,9 +26,12 @@ def score_model(test_data_path, model_path):
     df = pd.read_csv(os.path.join(test_data_path, 'testdata.csv'))
     with open(os.path.join(model_path, 'trainedmodel.pkl'), 'rb') as file:
         model = pickle.load(file)
-    X = df[['lastmonth_activity', '', '']].copy()
+    X = df[['lastmonth_activity', 'lastyear_activity', 'number_of_employees']].copy()
     y = df['exited'].copy()
     predictions = model.predict(X)
     f1score = metrics.f1_score(y, predictions)
-    with open(os.path.join(model_path, 'latestscore.txt')) as file:
+    with open(os.path.join(model_path, 'latestscore.txt'), 'w') as file:
         file.write(f1score)
+
+if __name__ == '__main__':
+    score_model(test_data_path, model_path)

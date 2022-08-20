@@ -11,30 +11,62 @@ with open('config.json','r') as f:
 
 dataset_csv_path = os.path.join(config['output_folder_path']) 
 test_data_path = os.path.join(config['test_data_path']) 
+prod_deployment_path = os.path.join(config['prod_deployment_path'])
 
 ##################Function to get model predictions
-def model_predictions():
+def model_predictions(data):
     #read the deployed model and a test dataset, calculate predictions
-    return #return value should be a list containing all predictions
+    with open(os.path.join(prod_deployment_path, 'trainedmodel.pkl'), 'rb') as file:
+        model = pickle.load(file)
+    predictions = model.predict(data)
+    #return value should be a list containing all predictions
+    return predictions
+
 
 ##################Function to get summary statistics
 def dataframe_summary():
     #calculate summary statistics here
-    return #return value should be a list containing all summary statistics
+    df = pd.read_csv(os.path.join(dataset_csv_path, 'finaldata.csv'))
+    cols = [col for col in df.columns if df[col]dtype != "O"]
+    summary = []
+    for c in cols:
+        summary.append(c)
+        summary.append(df[c].mean())
+        summary.append(df[c].median())
+        summary.append(df[c].std())
+
+    #return value should be a list containing all summary statistics
+    return summary 
+
+################# Missing data
+def missing_data():
+    df = pd.read_csv(os.path.join(dataset_csv_path, 'finaldata.csv'))
+    return df.isna().sum() / df.shape[0]    
 
 ##################Function to get timings
 def execution_time():
     #calculate timing of training.py and ingestion.py
-    return #return a list of 2 timing values in seconds
+    starttime = timeit.default_timer()
+    os.system('python ingestion.py')
+    timing_ingestion = timeit.default_timer() - starttime
+
+    starttime = timeit.default_timer()
+    os.system('python training.py')
+    timing_train = timeit.default_timer() - starttime
+
+    #return a list of 2 timing values in seconds
+    return [timing_ingestion, timing_train]
+
 
 ##################Function to check dependencies
 def outdated_packages_list():
-    #get a list of 
+     return os.system('pip list --outdated')
 
 
 if __name__ == '__main__':
     model_predictions()
     dataframe_summary()
+    missing_data()
     execution_time()
     outdated_packages_list()
 
