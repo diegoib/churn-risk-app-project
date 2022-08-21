@@ -10,7 +10,7 @@ from diagnostics import model_predictions, dataframe_summary, missing_data, exec
 
 ######################Set up variables for use in our script
 app = Flask(__name__)
-#app.secret_key = '1652d576-484a-49fd-913a-6879acfa6ba4'
+app.secret_key = '1652d576-484a-49fd-913a-6879acfa6ba4'
 
 with open('config.json','r') as f:
     config = json.load(f) 
@@ -59,4 +59,4 @@ def diagnostics():
 
 
 if __name__ == "__main__":    
-    app.run(host='0.0.0.0', port=8000)#, debug=True, threaded=True)
+    app.run(host='0.0.0.0', port=8000, debug=True, threaded=True)

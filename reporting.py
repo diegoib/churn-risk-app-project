@@ -15,18 +15,18 @@ with open('config.json','r') as f:
 dataset_csv_path = os.path.join(config['output_folder_path']) 
 test_data_path = os.path.join(config['test_data_path']) 
 prod_deployment_path = os.path.join(config['prod_deployment_path'])
-
+model_path = os.path.join(config['output_model_path'])
 
 ##############Function for reporting
-def score_model(df_name):
+def reporting(test_data_path, df_name, model_path):
     #calculate a confusion matrix using the test data and the deployed model
     #write the confusion matrix to the workspace
-    predictions = model_predictions(df_name)
-    data = pd.read_csv(os.path.join(test_data_path,'testdata.csv'))
+    data = pd.read_csv(os.path.join(test_data_path, df_name))
     y_true = data['exited']
+    predictions = model_predictions(test_data_path, df_name)
     metrics.ConfusionMatrixDisplay.from_predictions(y_true, predictions)
-    plt.savefig('confusionmatrix.png')
+    plt.savefig(os.path.join(model_path, 'confusionmatrix.png'))
 
 
 if __name__ == '__main__':
-    score_model('testdata.csv')
+    reporting('testdata.csv')

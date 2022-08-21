@@ -12,7 +12,7 @@ response3 = requests.get('http://127.0.0.1:8000/summarystats').status_code
 response4 = requests.get('http://127.0.0.1:8000/diagnostics').status_code
 
 #combine all API responses
-responses = [response1, response2, response3, response4]
+responses = [str(response1), str(response2), str(response3), str(response4)]
 
 #write the responses to your workspace
 with open('apicallstatus.txt', 'w') as file:
