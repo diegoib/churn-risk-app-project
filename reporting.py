@@ -29,4 +29,4 @@ def reporting(test_data_path, df_name, model_path):
 
 
 if __name__ == '__main__':
-    reporting('testdata.csv')
+    reporting(dataset_csv_path, 'finaldata.csv', model_path)
